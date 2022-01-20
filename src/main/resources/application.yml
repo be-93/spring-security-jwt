@@ -10,14 +10,10 @@ spring:
       password: 1234
       minimum-idle: 10
       maximum-pool-size: 10
-    jpa:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
       hibernate:
-        ddl-auto: update
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
-      properties:
-        hibernate:
-          format_sql: true
-          jdbc:
-            batch_size: 1000
-          order_inserts: true
-          order_updates: true
+        format_sql: true
