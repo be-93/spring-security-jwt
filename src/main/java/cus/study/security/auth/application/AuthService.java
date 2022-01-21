@@ -2,11 +2,8 @@ package cus.study.security.auth.application;
 
 import cus.study.security.auth.domain.Member;
 import cus.study.security.auth.domain.MemberRepository;
-import cus.study.security.auth.dto.LoginRequest;
-import cus.study.security.auth.dto.LoginResponse;
-import cus.study.security.auth.dto.SignUpRequest;
-import cus.study.security.auth.dto.Token;
-import cus.study.security.common.Response;
+import cus.study.security.auth.dto.*;
+import cus.study.security.common.CommonResponse;
 import cus.study.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +14,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,17 +29,18 @@ public class AuthService {
 
     public ResponseEntity<?> signUp(SignUpRequest sign) {
         if (memberRepository.existsByEmail(sign.getEmail())) {
-            return Response.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
+            return CommonResponse.fail("이미 회원가입된 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        Member saveMember = new Member(sign.getEmail(), passwordEncode.encode(sign.getPassword()));
+        Member savedMember
+                = memberRepository.save(new Member(sign.getEmail(), passwordEncode.encode(sign.getPassword())));
 
-        return Response.success(memberRepository.save(saveMember), HttpStatus.CREATED);
+        return CommonResponse.success(SignUpResponse.of(savedMember.getEmail()), HttpStatus.CREATED);
     }
 
     public ResponseEntity login(LoginRequest loginRequest) {
         if (memberRepository.findByEmail(loginRequest.getEmail()).orElse(null) == null) {
-            return Response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+            return CommonResponse.fail("해당 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
@@ -59,6 +59,6 @@ public class AuthService {
                 .email(loginRequest.getEmail())
                 .build();
 
-        return Response.success(result);
+        return CommonResponse.success(result);
     }
 }

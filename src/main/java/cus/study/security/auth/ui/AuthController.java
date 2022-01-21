@@ -3,9 +3,11 @@ package cus.study.security.auth.ui;
 import cus.study.security.auth.application.AuthService;
 import cus.study.security.auth.dto.LoginRequest;
 import cus.study.security.auth.dto.SignUpRequest;
+import cus.study.security.common.CommonResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,5 +27,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
+    }
+
+    @PostMapping("/tokenTest")
+    public ResponseEntity tokenTest() {
+        return CommonResponse.success();
     }
 }
