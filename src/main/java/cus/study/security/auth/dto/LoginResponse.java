@@ -9,9 +9,21 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 @Getter
-@Builder
 public class LoginResponse {
 
     private String email;
     private Token token;
+
+    protected LoginResponse() {
+    }
+
+    @Builder
+    public LoginResponse(String email, Token token) {
+        this.email = email;
+        this.token = token;
+    }
+
+    public static LoginResponse of(String email, Token token) {
+        return new LoginResponse(email, token);
+    }
 }

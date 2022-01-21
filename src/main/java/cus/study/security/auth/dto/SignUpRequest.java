@@ -18,6 +18,18 @@ public class SignUpRequest {
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
     private String password;
 
+    protected SignUpRequest() {
+    }
+
+    public SignUpRequest(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public static SignUpRequest of(String email, String password) {
+        return new SignUpRequest(email, password);
+    }
+
     public Member toMember() {
         return new Member(email, password);
     }
