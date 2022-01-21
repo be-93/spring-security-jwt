@@ -5,6 +5,7 @@ import cus.study.security.auth.domain.MemberRepository;
 import cus.study.security.auth.dto.LoginRequest;
 import cus.study.security.auth.dto.LoginResponse;
 import cus.study.security.auth.dto.SignUpRequest;
+import cus.study.security.auth.dto.Token;
 import cus.study.security.common.Response;
 import cus.study.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -51,10 +52,11 @@ public class AuthService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        String token = jwtTokenProvider.generateToken(authentication);
+        Token token = jwtTokenProvider.generateToken(authentication);
 
         LoginResponse result = LoginResponse.builder()
-                .loginToken(token)
+                .token(token)
+                .email(loginRequest.getEmail())
                 .build();
 
         return Response.success(result);

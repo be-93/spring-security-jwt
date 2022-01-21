@@ -12,6 +12,6 @@ import javax.validation.constraints.Pattern;
 @Builder
 public class LoginResponse {
 
-    private String loginToken;
-
+    private String email;
+    private Token token;
 }
